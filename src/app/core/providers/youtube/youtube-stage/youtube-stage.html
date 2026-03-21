@@ -1,0 +1,67 @@
+<div class="relative w-full h-full bg-zinc-950 rounded-lg">
+  <!-- Video players — clipped to rounded bounds -->
+  <div class="absolute inset-0 overflow-hidden rounded-lg">
+    <!-- Player A -->
+    <div
+      class="absolute inset-0 transition-none"
+      [style.opacity]="opacityForA()"
+      [style.z-index]="opacityForA() >= opacityForB() ? 1 : 0"
+    >
+      <div id="yt-player-a" class="w-full h-full"></div>
+    </div>
+
+    <!-- Player B -->
+    <div
+      class="absolute inset-0 transition-none"
+      [style.opacity]="opacityForB()"
+      [style.z-index]="opacityForB() > opacityForA() ? 1 : 0"
+    >
+      <div id="yt-player-b" class="w-full h-full"></div>
+    </div>
+
+    <!-- Crossfade progress strip (visible only while fading) -->
+    @if (crossfade.opacityB() > 0) {
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-zinc-800 z-10 pointer-events-none">
+        <div
+          class="h-full bg-yellow-400 transition-none"
+          [style.width.%]="crossfade.opacityB() * 100"
+        ></div>
+      </div>
+    }
+  </div>
+
+  <!-- Add track overlay — sits outside the video clip so it clears YouTube's UI -->
+  <div class="absolute -top-3 -right-3 z-20 flex flex-col items-end gap-1.5">
+    @if (!showAddInput()) {
+      <button
+        class="w-8 h-8 rounded-full bg-black/60 text-white text-xl leading-none flex items-center justify-center hover:bg-black/80 transition-colors"
+        (click)="showAddInput.set(true); addError.set('')"
+        title="Insert track after current"
+      >+</button>
+    } @else {
+      <div class="flex items-center gap-2 bg-zinc-900/95 rounded-lg px-3 py-2 shadow-xl border border-zinc-700">
+        <input
+          [(ngModel)]="addUrl"
+          type="url"
+          placeholder="YouTube URL…"
+          class="w-52 bg-transparent text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none"
+          (keyup.enter)="insertTrack()"
+          (keyup.escape)="showAddInput.set(false); addUrl = ''; addError.set('')"
+          #addInput
+        />
+        <button
+          class="text-xs px-2 py-1 rounded bg-yellow-400 text-zinc-950 font-semibold disabled:opacity-50 whitespace-nowrap"
+          (click)="insertTrack()"
+          [disabled]="addingTrack() || !addUrl.trim()"
+        >{{ addingTrack() ? '…' : 'Add' }}</button>
+        <button
+          class="text-zinc-500 hover:text-zinc-200 leading-none"
+          (click)="showAddInput.set(false); addUrl = ''; addError.set('')"
+        >×</button>
+      </div>
+      @if (addError()) {
+        <p class="text-xs text-red-400 bg-zinc-900/90 px-2 py-1 rounded border border-red-900/50">{{ addError() }}</p>
+      }
+    }
+  </div>
+</div>

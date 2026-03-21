@@ -1,0 +1,93 @@
+<div
+  class="group relative rounded-lg transition-colors duration-150"
+  [class.bg-zinc-800]="!isCurrent()"
+  [class.bg-zinc-900]="isCurrent()"
+  [class.border-l-2]="isCurrent() || isNext()"
+  [class.border-yellow-400]="isCurrent()"
+  [class.border-zinc-400]="isNext() && !isCurrent()"
+>
+  <!-- Hover tooltip — floats to the left of the card -->
+  <div class="absolute right-full top-1/2 -translate-y-1/2 mr-2 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 shadow-xl whitespace-nowrap">
+      <p class="text-sm font-medium text-zinc-100">{{ track().title }}</p>
+      @if (track().artist) {
+        <p class="text-xs text-zinc-400 mt-0.5">{{ track().artist }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Main row -->
+  <div class="flex items-center gap-3 p-3">
+    <!-- Thumbnail -->
+    <div class="relative flex-shrink-0">
+      <img
+        [src]="track().thumbnailUrl"
+        [alt]="track().title"
+        class="w-12 h-9 object-cover rounded"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Title + artist -->
+    <div class="flex-1 min-w-0">
+      <p
+        class="text-sm font-medium truncate"
+        [class.text-yellow-400]="isCurrent()"
+        [class.text-zinc-100]="!isCurrent()"
+      >{{ track().title }}</p>
+      @if (track().artist) {
+        <p class="text-xs text-zinc-500 truncate">{{ track().artist }}</p>
+      }
+      @if (track().cueIn || track().cueOut) {
+        <div class="flex gap-2 mt-0.5">
+          @if (track().cueIn) {
+            <span class="text-[10px] text-zinc-500 font-mono">IN {{ track().cueIn }}s</span>
+          }
+          @if (track().cueOut) {
+            <span class="text-[10px] text-yellow-600 font-mono">OUT {{ track().cueOut }}s</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Right side -->
+    <div class="flex items-center gap-2 flex-shrink-0">
+      @if (isCurrent()) {
+        <span class="text-[10px] font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded">PLAYING</span>
+      }
+      @if (isNext() && !isCurrent()) {
+        <span class="text-[10px] font-bold text-zinc-300 bg-zinc-700 px-1.5 py-0.5 rounded">UP NEXT</span>
+      }
+      <span class="text-xs text-zinc-500 font-mono">{{ formatDuration(track().duration) }}</span>
+
+      <!-- Play next — hidden for the currently playing track -->
+      @if (!isCurrent()) {
+        <button
+          class="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-yellow-400 transition-opacity text-xs px-1.5 py-0.5 rounded border border-zinc-700 hover:border-yellow-400"
+          (click)="playNext.emit(index())"
+          title="Play next"
+        >↑ Next</button>
+      }
+
+      <!-- Expand cue editor -->
+      <button
+        class="text-zinc-500 hover:text-zinc-300 transition-colors w-5 h-5 flex items-center justify-center"
+        (click)="toggleExpand()"
+        [title]="expanded() ? 'Close cue editor' : 'Edit cue points'"
+      >
+        <span class="text-xs transition-transform duration-200" [class.rotate-180]="expanded()">▼</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Cue editor panel -->
+  @if (expanded()) {
+    <div class="px-3 pb-3">
+      <app-cue-editor
+        [track]="track()"
+        [index]="index()"
+        (cueChange)="cueChange.emit($event)"
+      />
+    </div>
+  }
+</div>

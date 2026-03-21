@@ -1,0 +1,5 @@
+{
+  "plugins": {
+    "./postcss-windows-path-fix.cjs": {}
+  }
+}

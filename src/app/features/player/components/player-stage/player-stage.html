@@ -1,0 +1,9 @@
+<div class="relative w-full h-full bg-zinc-950 rounded-lg shadow-[inset_0_0_40px_rgba(0,0,0,0.6)]">
+  @if (stageComponent()) {
+    <ng-container *ngComponentOutlet="stageComponent()!" />
+  } @else {
+    <div class="flex items-center justify-center h-full">
+      <p class="text-zinc-600 text-sm">No track loaded</p>
+    </div>
+  }
+</div>

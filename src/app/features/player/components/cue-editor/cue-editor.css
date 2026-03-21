@@ -1,0 +1,32 @@
+.cue-slider {
+  width: 100%;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: #52525b; /* zinc-600 */
+  outline: none;
+  cursor: pointer;
+}
+
+.cue-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #facc15; /* yellow-400 */
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.cue-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.cue-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: #facc15;
+  cursor: pointer;
+}

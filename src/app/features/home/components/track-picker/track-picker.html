@@ -1,0 +1,76 @@
+<div class="space-y-4">
+  <!-- Header row -->
+  <div class="flex items-center justify-between">
+    <h2 class="font-semibold text-zinc-200">{{ playlistTitle() }}</h2>
+    <div class="flex items-center gap-3">
+      <button
+        class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+        (click)="toggleAll()"
+      >{{ allSelected ? 'Deselect all' : 'Select all' }}</button>
+      <span class="text-xs text-zinc-600">{{ selectedIds().size }} / {{ embeddableCount }} selected</span>
+    </div>
+  </div>
+
+  <!-- Start Mix -->
+  <div class="flex justify-center py-2">
+    <button
+      class="px-10 py-3 rounded-xl bg-yellow-400 text-zinc-950 font-black text-base tracking-wide hover:bg-yellow-300 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+      (click)="onStartMix()"
+      [disabled]="selectedIds().size === 0"
+    >Start Mix →</button>
+  </div>
+
+  <!-- Track list -->
+  <div class="grid gap-2 max-h-96 overflow-y-auto pr-1">
+    @for (track of tracks(); track track.id) {
+      <div class="relative group/track">
+        <label
+          class="flex items-center gap-3 p-3 rounded-lg transition-colors"
+          [class.cursor-pointer]="track.embeddable !== false"
+          [class.cursor-not-allowed]="track.embeddable === false"
+          [class.opacity-40]="track.embeddable === false"
+          [class.bg-zinc-800]="selectedIds().has(track.id)"
+          [class.bg-zinc-900]="!selectedIds().has(track.id)"
+          [class.border]="selectedIds().has(track.id)"
+          [class.border-yellow-400/30]="selectedIds().has(track.id)"
+          [class.border-transparent]="!selectedIds().has(track.id)"
+        >
+          <input
+            type="checkbox"
+            class="accent-yellow-400 w-4 h-4 flex-shrink-0"
+            [checked]="selectedIds().has(track.id)"
+            [disabled]="track.embeddable === false"
+            (change)="toggleTrack(track.id)"
+          />
+          @if (track.thumbnailUrl) {
+            <img
+              [src]="track.thumbnailUrl"
+              [alt]="track.title"
+              class="w-12 h-9 object-cover rounded flex-shrink-0"
+              loading="lazy"
+            />
+          } @else {
+            <div class="w-12 h-9 rounded flex-shrink-0 bg-zinc-800 flex items-center justify-center">
+              <span class="text-zinc-600 text-xs">✕</span>
+            </div>
+          }
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-zinc-100 truncate">{{ track.title }}</p>
+            @if (track.artist) {
+              <p class="text-xs text-zinc-500 truncate">{{ track.artist }}</p>
+            }
+          </div>
+          <span class="text-xs text-zinc-600 font-mono flex-shrink-0">{{ formatDuration(track.duration) }}</span>
+        </label>
+
+        <!-- Restriction tooltip -->
+        @if (track.embeddable === false) {
+          <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-xs text-zinc-300 whitespace-nowrap shadow-lg opacity-0 group-hover/track:opacity-100 transition-opacity pointer-events-none z-20">
+            {{ track.embedError ?? 'This video cannot be embedded' }}
+            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-zinc-700"></div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

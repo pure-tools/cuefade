@@ -1,0 +1,75 @@
+<div class="min-h-screen bg-zinc-950 text-zinc-100">
+
+  <app-home-header (pricingClick)="showPricing.set(true)" />
+
+  <main class="max-w-6xl mx-auto px-4 py-12 flex flex-col gap-12">
+
+    <div class="text-center">
+      <h1 class="text-4xl font-black tracking-tight">Import playlist</h1>
+    </div>
+
+    <!-- ─── Source badges ─── -->
+    <div class="flex items-center justify-center gap-4">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-700 bg-zinc-900">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <span class="text-sm font-medium text-zinc-200">YouTube</span>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 opacity-50 cursor-not-allowed">
+        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+        <span class="text-sm font-medium text-zinc-500">Spotify</span>
+        <span class="text-[10px] text-yellow-600 font-bold">V2</span>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 opacity-50 cursor-not-allowed">
+        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+        <span class="text-sm font-medium text-zinc-500">SoundCloud</span>
+        <span class="text-[10px] text-yellow-600 font-bold">V2</span>
+      </div>
+    </div>
+
+    <!-- ─── URL Input ─── -->
+    <app-url-input
+      [initialUrl]="restoredUrl()"
+      (loaded)="onPlaylistLoaded($event)"
+      (cleared)="onClear()"
+    />
+
+    <!-- ─── Track picker ─── -->
+    @if (tracks().length) {
+      <app-track-picker
+        [tracks]="tracks()"
+        [playlistTitle]="playlistTitle()"
+        [selectedIds]="selectedIds()"
+        (selectionChange)="onSelectionChange($event)"
+        (startMix)="onStartMix($event)"
+      />
+    }
+
+    <!-- ─── Ad slot (free tier) ─── -->
+    <!-- <div class="border border-dashed border-zinc-800 rounded-lg p-6 text-center">
+      <p class="text-zinc-700 text-xs uppercase tracking-widest mb-1">Advertisement</p>
+      <div class="h-20 bg-zinc-900 rounded flex items-center justify-center">
+        <p class="text-zinc-700 text-xs">Ad space ·
+          <button class="text-yellow-600 hover:underline" (click)="showPricing.set(true)">Remove with Pro ($5 once)</button>
+        </p>
+      </div>
+    </div> -->
+
+    <!-- ─── Feature highlights ─── -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (feature of featureCards; track feature.title) {
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 space-y-2">
+          <div class="text-2xl">{{ feature.icon }}</div>
+          <h3 class="font-semibold text-zinc-100">{{ feature.title }}</h3>
+          <p class="text-sm text-zinc-500">{{ feature.desc }}</p>
+          @if (feature.pro) {
+            <span class="inline-block text-[10px] font-bold text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-full">PRO</span>
+          }
+        </div>
+      }
+    </div>
+
+  </main>
+
+  <app-pricing-modal [visible]="showPricing()" (close)="showPricing.set(false)" />
+
+</div>
