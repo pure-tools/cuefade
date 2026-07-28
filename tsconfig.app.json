@@ -4,7 +4,15 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["youtube"]
+    "baseUrl": ".",
+    "types": ["youtube"],
+    "paths": {
+      "@puretools/mobilka": ["../mobilka/src/index.ts"],
+      "@puretools/monetka": ["../monetka/src/index.ts"],
+      "@angular/core": ["node_modules/@angular/core"],
+      "@angular/core/*": ["node_modules/@angular/core/*"],
+      "tslib": ["node_modules/tslib"]
+    }
   },
   "include": [
     "src/**/*.ts"

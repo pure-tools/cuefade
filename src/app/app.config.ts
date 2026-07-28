@@ -14,6 +14,9 @@ import { MUSIC_PROVIDERS } from './core/providers/provider.token';
 import { YouTubeProvider } from './core/providers/youtube/youtube.provider';
 import { SpotifyProvider } from './core/providers/spotify/spotify.provider';
 import { SoundCloudProvider } from './core/providers/soundcloud/soundcloud.provider';
+import { provideResponsive } from '@puretools/mobilka';
+import { providePayments } from '@puretools/monetka';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,5 +28,8 @@ export const appConfig: ApplicationConfig = {
     { provide: MUSIC_PROVIDERS, useClass: YouTubeProvider, multi: true },
     { provide: MUSIC_PROVIDERS, useClass: SpotifyProvider, multi: true },
     { provide: MUSIC_PROVIDERS, useClass: SoundCloudProvider, multi: true },
+
+    provideResponsive({ strategy: 'combination' }),
+    providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey }),
   ],
 };
