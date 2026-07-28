@@ -11,7 +11,9 @@
       "@puretools/monetka": ["../monetka/src/index.ts"],
       "@angular/core": ["node_modules/@angular/core"],
       "@angular/core/*": ["node_modules/@angular/core/*"],
-      "tslib": ["node_modules/tslib"]
+      "tslib": ["node_modules/tslib"],
+      "@paddle/paddle-js": ["node_modules/@paddle/paddle-js"],
+      "@paddle/paddle-js/*": ["node_modules/@paddle/paddle-js/*"]
     }
   },
   "include": [
