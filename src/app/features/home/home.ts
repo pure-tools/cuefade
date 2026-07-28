@@ -8,13 +8,15 @@ import { HomeHeaderComponent } from './components/home-header/home-header';
 import { UrlInputComponent, PlaylistLoadedEvent } from './components/url-input/url-input';
 import { TrackPickerComponent } from './components/track-picker/track-picker';
 import { PricingModalComponent } from './components/pricing-modal/pricing-modal';
+import { AuthModalComponent } from '../auth/auth-modal/auth-modal';
+import { AuthService } from '../../core/services/auth.service';
 
 const HOME_SESSION_KEY = 'cuefade_home';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HomeHeaderComponent, UrlInputComponent, TrackPickerComponent, PricingModalComponent],
+  imports: [CommonModule, HomeHeaderComponent, UrlInputComponent, TrackPickerComponent, PricingModalComponent, AuthModalComponent],
   templateUrl: './home.html',
   host: { class: 'block' },
 })
@@ -22,11 +24,13 @@ export class HomeComponent {
   private queue = inject(QueueService);
   private router = inject(Router);
   private session = inject(SessionStorageService);
+  readonly auth = inject(AuthService);
 
   tracks = signal<Track[]>([]);
   playlistTitle = signal('');
   selectedIds = signal<Set<string>>(new Set());
   showPricing = signal(false);
+  showAuth = signal(false);
   restoredUrl = signal('');
 
   readonly featureCards = [
@@ -38,6 +42,15 @@ export class HomeComponent {
   constructor() {
     this.restorePlaylistSession();
     this.persistPlaylistSession();
+    this.checkUpgradeReturn();
+  }
+
+  private checkUpgradeReturn(): void {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('upgraded') === '1') {
+      this.auth.refreshProfile();
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }
 
   onPlaylistLoaded(event: PlaylistLoadedEvent): void {

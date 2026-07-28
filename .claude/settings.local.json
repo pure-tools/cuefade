@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(Get-ChildItem -Recurse \"C:\\\\Work\\\\git\\\\mobilka\\\\src\")",
+      "Bash(Select-Object FullName)",
+      "Bash(npx tsc *)",
+      "Bash(npm install *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm audit *)"
+    ]
+  }
+}

@@ -4,9 +4,31 @@
       <span class="text-yellow-400 font-black text-xl tracking-widest uppercase">CueFade</span>
       <span class="text-zinc-600 text-xs">Create Your Own Mix</span>
     </div>
-    <button
-      class="text-sm px-4 py-1.5 rounded-full border border-yellow-400/50 text-yellow-400 font-semibold hover:bg-yellow-400 hover:text-zinc-950 transition-colors"
-      (click)="pricingClick.emit()"
-    >Unlock Pro · $5</button>
+
+    <div class="flex items-center gap-3">
+      @if (auth.isLoggedIn()) {
+        @if (auth.isPro()) {
+          <span class="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-full">PRO</span>
+        } @else {
+          <button
+            class="text-sm px-4 py-1.5 rounded-full border border-yellow-400/50 text-yellow-400 font-semibold hover:bg-yellow-400 hover:text-zinc-950 transition-colors"
+            (click)="pricingClick.emit()"
+          >Unlock Pro · $5</button>
+        }
+        <button
+          class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          (click)="auth.signOut()"
+        >Sign out</button>
+      } @else {
+        <button
+          class="text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
+          (click)="authClick.emit()"
+        >Sign in</button>
+        <button
+          class="text-sm px-4 py-1.5 rounded-full border border-yellow-400/50 text-yellow-400 font-semibold hover:bg-yellow-400 hover:text-zinc-950 transition-colors"
+          (click)="pricingClick.emit()"
+        >Unlock Pro · $5</button>
+      }
+    </div>
   </div>
 </header>

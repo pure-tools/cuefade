@@ -34,14 +34,16 @@
 
       <!-- CTA -->
       <div class="space-y-3 pt-2">
-        <a
-          [href]="paymentUrl"
-          target="_blank"
-          rel="noopener"
-          class="block w-full py-3 rounded-xl bg-yellow-400 text-zinc-950 font-bold text-center text-sm hover:bg-yellow-300 transition-colors"
+        @if (error()) {
+          <p class="text-red-400 text-xs">{{ error() }}</p>
+        }
+        <button
+          (click)="unlock()"
+          [disabled]="loading()"
+          class="block w-full py-3 rounded-xl bg-yellow-400 text-zinc-950 font-bold text-center text-sm hover:bg-yellow-300 transition-colors disabled:opacity-50"
         >
-          Unlock for $5
-        </a>
+          {{ loading() ? 'Redirecting…' : 'Unlock for $5' }}
+        </button>
         <a
           [href]="kofiUrl"
           target="_blank"

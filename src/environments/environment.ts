@@ -4,4 +4,7 @@ export const environment = {
   youtubeApiKey: 'AIzaSyBLL1eHrOIYh9F_73e5LHTEGBhi0F68X3I',
   // Key at: https://dashboard.stripe.com/apikeys
   stripePublicKey: '',
+  // Keys at: https://supabase.com/dashboard → project → Settings → API
+  supabaseUrl: '',
+  supabaseAnonKey: '',
 };

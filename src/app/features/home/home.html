@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-zinc-950 text-zinc-100">
 
-  <app-home-header (pricingClick)="showPricing.set(true)" />
+  <app-home-header (pricingClick)="showPricing.set(true)" (authClick)="showAuth.set(true)" />
 
   <main class="max-w-6xl mx-auto px-4 py-12 flex flex-col gap-12">
 
@@ -70,6 +70,14 @@
 
   </main>
 
-  <app-pricing-modal [visible]="showPricing()" (close)="showPricing.set(false)" />
+  <app-pricing-modal
+    [visible]="showPricing()"
+    (close)="showPricing.set(false)"
+    (requireAuth)="showAuth.set(true)"
+  />
+
+  @if (showAuth()) {
+    <app-auth-modal (close)="showAuth.set(false)" (success)="showPricing.set(true)" />
+  }
 
 </div>
