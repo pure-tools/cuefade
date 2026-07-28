@@ -1,6 +1,9 @@
 import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import type { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { supabase } from './supabase.client';
+import type { Database } from '../types/database.types';
+
+type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
 export interface UserProfile {
   id: string;
@@ -57,14 +60,14 @@ export class AuthService implements OnDestroy {
       .from('profiles')
       .select('id, email, is_pro, stripe_customer_id')
       .eq('id', userId)
-      .single();
+      .single() as { data: ProfileRow | null; error: unknown };
 
     if (data) {
       this._profile.set({
-        id: data['id'],
-        email: data['email'],
-        isPro: data['is_pro'] ?? false,
-        stripeCustomerId: data['stripe_customer_id'],
+        id: data.id,
+        email: data.email,
+        isPro: data.is_pro,
+        stripeCustomerId: data.stripe_customer_id ?? undefined,
       });
     }
   }
