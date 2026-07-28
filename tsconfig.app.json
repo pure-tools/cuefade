@@ -4,15 +4,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "baseUrl": ".",
-    "types": ["youtube"],
-    "paths": {
-      "@angular/core": ["node_modules/@angular/core"],
-      "@angular/core/*": ["node_modules/@angular/core/*"],
-      "tslib": ["node_modules/tslib"],
-      "@paddle/paddle-js": ["node_modules/@paddle/paddle-js"],
-      "@paddle/paddle-js/*": ["node_modules/@paddle/paddle-js/*"]
-    }
+    "types": ["youtube"]
   },
   "include": [
     "src/**/*.ts"
