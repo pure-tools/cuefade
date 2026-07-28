@@ -1,5 +1,5 @@
 import { Component, input, output, signal, inject } from '@angular/core';
-import { PaymentService } from '@puretools/monetka';
+import { PaymentService } from '@pure-tools/monetka';
 import { AuthService } from '../../../../core/services/auth.service';
 
 const KOFI_URL = 'https://ko-fi.com/TODO';

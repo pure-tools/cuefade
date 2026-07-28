@@ -14,8 +14,8 @@ import { MUSIC_PROVIDERS } from './core/providers/provider.token';
 import { YouTubeProvider } from './core/providers/youtube/youtube.provider';
 import { SpotifyProvider } from './core/providers/spotify/spotify.provider';
 import { SoundCloudProvider } from './core/providers/soundcloud/soundcloud.provider';
-import { provideResponsive } from '@puretools/mobilka';
-import { providePayments } from '@puretools/monetka';
+import { provideResponsive } from '@pure-tools/mobilka';
+import { providePayments } from '@pure-tools/monetka';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
