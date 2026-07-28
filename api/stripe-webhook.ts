@@ -17,7 +17,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(
-      req.body as Buffer,
+      req.body as string,
       sig,
       process.env['STRIPE_WEBHOOK_SECRET']!
     );
