@@ -7,8 +7,6 @@
     "baseUrl": ".",
     "types": ["youtube"],
     "paths": {
-      "@pure-tools/mobilka": ["../mobilka/src/index.ts"],
-      "@pure-tools/monetka": ["../monetka/src/index.ts"],
       "@angular/core": ["node_modules/@angular/core"],
       "@angular/core/*": ["node_modules/@angular/core/*"],
       "tslib": ["node_modules/tslib"],
