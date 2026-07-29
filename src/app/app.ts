@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FaviconService } from './core/services/favicon.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { RouterOutlet } from '@angular/router';
   template: '<router-outlet />',
   styles: [':host { display: block; height: 100vh; }'],
 })
-export class App {}
+export class App {
+  constructor() {
+    inject(FaviconService);
+  }
+}
