@@ -16,6 +16,7 @@ import { SpotifyProvider } from './core/providers/spotify/spotify.provider';
 import { SoundCloudProvider } from './core/providers/soundcloud/soundcloud.provider';
 import { provideResponsive } from '@pure-tools/mobilka';
 import { providePayments } from '@pure-tools/monetka';
+import { provideTheme } from '@pure-tools/paletka';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
@@ -31,5 +32,6 @@ export const appConfig: ApplicationConfig = {
 
     provideResponsive({ strategy: 'combination' }),
     providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey }),
+    provideTheme(),
   ],
 };
