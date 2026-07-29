@@ -1,26 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 210">
   <defs>
     <clipPath id="stripe-clip">
-      <path d="M 48,58 Q 48,52 53,55 L 127,98 Q 131,100 127,102 L 53,145 Q 48,148 48,142 Z"/>
+      <path d="M 48,59 Q 48,52 53,55 L 135,103 Q 139,105 135,107 L 53,155 Q 48,158 48,151 Z"/>
     </clipPath>
     <mask id="cutout">
-      <!-- White = keep, black = cut through -->
-      <rect width="200" height="200" fill="white"/>
-      <!-- Stripe bars cut out, clipped to triangle shape -->
+      <rect width="210" height="210" fill="white"/>
       <g clip-path="url(#stripe-clip)">
-        <rect x="44" y="52"  width="91" height="8" fill="black"/>
-        <rect x="44" y="66"  width="91" height="8" fill="black"/>
-        <rect x="44" y="80"  width="91" height="8" fill="black"/>
-        <rect x="44" y="94"  width="91" height="8" fill="black"/>
-        <rect x="44" y="108" width="91" height="8" fill="black"/>
-        <rect x="44" y="122" width="91" height="8" fill="black"/>
-        <rect x="44" y="136" width="91" height="8" fill="black"/>
+        <rect x="43" y="52"  width="101" height="9" fill="black"/>
+        <rect x="43" y="67"  width="101" height="9" fill="black"/>
+        <rect x="43" y="83"  width="101" height="9" fill="black"/>
+        <rect x="43" y="98"  width="101" height="9" fill="black"/>
+        <rect x="43" y="114" width="101" height="9" fill="black"/>
+        <rect x="43" y="129" width="101" height="9" fill="black"/>
+        <rect x="43" y="145" width="101" height="9" fill="black"/>
       </g>
-      <!-- Filled triangle cut out -->
-      <path d="M 90,58 Q 90,52 95,55 L 169,98 Q 173,100 169,102 L 95,145 Q 90,148 90,142 Z" fill="black"/>
+      <path d="M 94,59 Q 94,52 100,55 L 181,103 Q 186,105 181,107 L 100,155 Q 94,158 94,151 Z" fill="black"/>
     </mask>
   </defs>
 
-  <!-- White circle with transparent triangle cutouts -->
-  <circle cx="100" cy="100" r="90" fill="white" mask="url(#cutout)"/>
+  <circle cx="105" cy="105" r="105" fill="white" mask="url(#cutout)"/>
 </svg>
