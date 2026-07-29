@@ -1,2 +1,36 @@
 @import "tailwindcss";
 @source "../src";
+
+@theme {
+  /* Remap zinc palette to paletka vars — all existing zinc Tailwind classes update automatically */
+  --color-zinc-950: var(--pt-bg);
+  --color-zinc-900: var(--pt-bg-alt);
+  --color-zinc-800: var(--pt-surface);
+  --color-zinc-700: var(--pt-surface-alt);
+  --color-zinc-600: var(--pt-text-muted);
+  --color-zinc-500: var(--pt-text-muted);
+  --color-zinc-400: var(--pt-text-muted);
+  --color-zinc-300: var(--pt-text);
+  --color-zinc-200: var(--pt-text);
+  --color-zinc-100: var(--pt-text);
+  /* Remap yellow accent to paletka accent */
+  --color-yellow-400: var(--pt-accent);
+  --color-yellow-300: var(--pt-accent);
+}
+
+@layer base {
+  /* Default vars (midnight theme) — paletka overrides these inline after Angular init */
+  :root {
+    --pt-bg: #0d1117;
+    --pt-bg-alt: #161b22;
+    --pt-surface: #21262d;
+    --pt-surface-alt: #2d333b;
+    --pt-text: #e6edf3;
+    --pt-text-muted: #8b949e;
+    --pt-accent: #58a6ff;
+    --pt-accent-fg: #ffffff;
+    --pt-accent-2: #3fb950;
+    --pt-border: #30363d;
+    --pt-shadow: rgba(0, 0, 0, 0.7);
+  }
+}

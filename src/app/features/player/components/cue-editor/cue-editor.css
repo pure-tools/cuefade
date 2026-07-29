@@ -3,7 +3,7 @@
   appearance: none;
   height: 4px;
   border-radius: 2px;
-  background: #52525b; /* zinc-600 */
+  background: var(--pt-border);
   outline: none;
   cursor: pointer;
 }
@@ -13,7 +13,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #facc15; /* yellow-400 */
+  background: var(--pt-accent);
   cursor: pointer;
   transition: transform 0.15s;
 }
@@ -27,6 +27,6 @@
   height: 14px;
   border: none;
   border-radius: 50%;
-  background: #facc15;
+  background: var(--pt-accent);
   cursor: pointer;
 }
