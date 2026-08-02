@@ -45,6 +45,15 @@ export class HomeComponent {
     this.restorePlaylistSession();
     this.persistPlaylistSession();
     this.checkUpgradeReturn();
+    this.checkNewMix();
+  }
+
+  private checkNewMix(): void {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('new') === '1') {
+      this.onClear();
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }
 
   private checkUpgradeReturn(): void {

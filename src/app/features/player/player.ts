@@ -41,7 +41,7 @@ export class PlayerComponent {
   }
 
   goHome(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { queryParams: { new: '1' } });
   }
 
   toggleQueue(): void {
