@@ -12,4 +12,7 @@ export class FeatureGateService {
   readonly canExportMix = computed(() => this.auth.isPro());
   readonly canUseFade = computed(() => this.auth.isPro());
   readonly canAddToQueue = computed(() => this.auth.isPro());
+  readonly canUseExtendedFadeDurations = computed(() => this.auth.isPro());
+  readonly noAds = computed(() => this.auth.isPro());
+  readonly canExportPlaylist = computed(() => this.auth.isPro());
 }

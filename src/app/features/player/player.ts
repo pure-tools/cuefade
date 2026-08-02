@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { MobileService } from '@pure-tools/mobilka';
 import { QueueService } from '../../core/services/queue.service';
 import { UpgradePromptService } from '../../core/services/upgrade-prompt.service';
+import { FeatureGateService } from '../../core/services/feature-gate.service';
 import { PlayerStageComponent } from './components/player-stage/player-stage';
 import { QueuePanelComponent } from './components/queue-panel/queue-panel';
 import { TransportComponent } from './components/transport/transport';
@@ -22,6 +23,7 @@ export class PlayerComponent {
   readonly queue = inject(QueueService);
   readonly mobile = inject(MobileService);
   readonly upgrade = inject(UpgradePromptService);
+  readonly gates = inject(FeatureGateService);
   private router = inject(Router);
   private titleService = inject(Title);
 

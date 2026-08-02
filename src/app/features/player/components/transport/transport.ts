@@ -40,6 +40,10 @@ export class TransportComponent {
   }
 
   setFadeDuration(seconds: number): void {
+    if (!this.gates.canUseExtendedFadeDurations() && seconds > 8) {
+      this.upgradePrompt.open();
+      return;
+    }
     this.crossfade.setTransitionDuration(seconds);
   }
 

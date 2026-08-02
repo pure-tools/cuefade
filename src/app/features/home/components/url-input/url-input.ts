@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProviderRegistryService } from '../../../../core/services/provider-registry.service';
+import { FeatureGateService } from '../../../../core/services/feature-gate.service';
 import { Track } from '../../../../core/interfaces/track';
+
+const PRO_PROVIDERS = new Set(['spotify', 'soundcloud']);
 
 export interface PlaylistLoadedEvent {
   url: string;
@@ -19,10 +22,12 @@ export interface PlaylistLoadedEvent {
 })
 export class UrlInputComponent implements OnInit {
   private registry = inject(ProviderRegistryService);
+  private gates = inject(FeatureGateService);
 
   initialUrl = input('');
   loaded = output<PlaylistLoadedEvent>();
   cleared = output();
+  requireUpgrade = output();
 
   url = '';
   loading = signal(false);
@@ -37,6 +42,10 @@ export class UrlInputComponent implements OnInit {
     const provider = this.registry.resolve(this.url);
     if (!provider) {
       this.error.set('No provider found for this URL. Supported: YouTube');
+      return;
+    }
+    if (PRO_PROVIDERS.has(provider.type) && !this.gates.canUseSpotify()) {
+      this.requireUpgrade.emit();
       return;
     }
     this.loading.set(true);

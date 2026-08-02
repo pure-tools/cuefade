@@ -2,7 +2,24 @@
   <!-- Header -->
   <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
     <h2 class="text-sm font-semibold text-zinc-200">Queue</h2>
-    <span class="text-xs text-zinc-500">{{ queue.tracks().length }} tracks</span>
+    <div class="flex items-center gap-3">
+      <span class="text-xs text-zinc-500">{{ queue.tracks().length }} tracks</span>
+      <button
+        class="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-200 transition-colors"
+        (click)="exportPlaylist()"
+        [title]="gates.canExportPlaylist() ? 'Copy tracklist with timestamps' : 'Upgrade to Pro to export'"
+      >
+        @if (exportCopied()) {
+          <span class="text-yellow-400">Copied!</span>
+        } @else {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Export
+          @if (!gates.canExportPlaylist()) {
+            <span class="text-[9px] font-bold text-yellow-400">PRO</span>
+          }
+        }
+      </button>
+    </div>
   </div>
 
   <!-- Drag-drop list -->

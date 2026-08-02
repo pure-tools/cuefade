@@ -56,14 +56,16 @@
     <div class="hidden md:flex items-center gap-1.5">
       <span class="text-sm text-zinc-600 mr-1">Fade interval</span>
       @for (dur of fadeDurations; track dur) {
+        @let locked = !gates.canUseExtendedFadeDurations() && dur > 8;
         <button
-          class="text-sm px-3 py-1.5 rounded transition-colors"
-          [class.bg-yellow-400]="crossfade.transitionDuration() === dur"
-          [class.text-zinc-950]="crossfade.transitionDuration() === dur"
-          [class.text-zinc-500]="crossfade.transitionDuration() !== dur"
-          [class.hover:text-zinc-300]="crossfade.transitionDuration() !== dur"
+          class="text-sm px-3 py-1.5 rounded transition-colors flex items-center gap-1"
+          [class.bg-yellow-400]="crossfade.transitionDuration() === dur && !locked"
+          [class.text-zinc-950]="crossfade.transitionDuration() === dur && !locked"
+          [class.text-zinc-500]="crossfade.transitionDuration() !== dur || locked"
+          [class.hover:text-zinc-300]="!locked"
+          [title]="locked ? 'Upgrade to Pro for longer fades' : ''"
           (click)="setFadeDuration(dur)"
-        >{{ dur }}s</button>
+        >{{ dur }}s @if (locked) { <span class="text-[9px] font-bold text-yellow-400">PRO</span> }</button>
       }
     </div>
   </div>
@@ -72,14 +74,16 @@
   <div class="flex items-center gap-2 px-5 pb-4 md:hidden">
     <span class="text-sm text-zinc-600 mr-1">Fade interval</span>
     @for (dur of fadeDurations; track dur) {
+      @let locked = !gates.canUseExtendedFadeDurations() && dur > 8;
       <button
-        class="text-sm px-4 py-2 rounded transition-colors"
-        [class.bg-yellow-400]="crossfade.transitionDuration() === dur"
-        [class.text-zinc-950]="crossfade.transitionDuration() === dur"
-        [class.text-zinc-500]="crossfade.transitionDuration() !== dur"
-        [class.hover:text-zinc-300]="crossfade.transitionDuration() !== dur"
+        class="text-sm px-4 py-2 rounded transition-colors flex items-center gap-1"
+        [class.bg-yellow-400]="crossfade.transitionDuration() === dur && !locked"
+        [class.text-zinc-950]="crossfade.transitionDuration() === dur && !locked"
+        [class.text-zinc-500]="crossfade.transitionDuration() !== dur || locked"
+        [class.hover:text-zinc-300]="!locked"
+        [title]="locked ? 'Upgrade to Pro for longer fades' : ''"
         (click)="setFadeDuration(dur)"
-      >{{ dur }}s</button>
+      >{{ dur }}s @if (locked) { <span class="text-[9px] font-bold text-yellow-400">PRO</span> }</button>
     }
   </div>
 </div>

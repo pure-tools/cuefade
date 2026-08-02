@@ -5,6 +5,8 @@ import { CdkDragDrop, CdkDrag, CdkDropList, CdkDragPlaceholder, moveItemInArray 
 import { QueueService } from '../../../../core/services/queue.service';
 import { CrossfadeService } from '../../../../core/services/crossfade.service';
 import { ProviderRegistryService } from '../../../../core/services/provider-registry.service';
+import { FeatureGateService } from '../../../../core/services/feature-gate.service';
+import { UpgradePromptService } from '../../../../core/services/upgrade-prompt.service';
 import { TrackCardComponent } from '../track-card/track-card';
 import { Track } from '../../../../core/interfaces/track';
 
@@ -19,8 +21,11 @@ export class QueuePanelComponent {
   readonly queue = inject(QueueService);
   private crossfade = inject(CrossfadeService);
   private registry = inject(ProviderRegistryService);
+  readonly gates = inject(FeatureGateService);
+  private upgradePrompt = inject(UpgradePromptService);
 
   insertOpenAt = signal<number | null>(null);
+  exportCopied = signal(false);
   insertUrl = '';
   insertError = signal('');
 
@@ -33,6 +38,35 @@ export class QueuePanelComponent {
     if (prevNextId !== newNextId) {
       this.crossfade.cancelFade();
     }
+  }
+
+  exportPlaylist(): void {
+    if (!this.gates.canExportPlaylist()) {
+      this.upgradePrompt.open();
+      return;
+    }
+    const fadeSec = this.crossfade.transitionDuration();
+    let elapsed = 0;
+    const lines = this.queue.tracks().map((track, i) => {
+      const ts = this.formatTimestamp(elapsed);
+      if (i > 0) elapsed += (track.duration ?? 180) - fadeSec;
+      return `${ts} ${track.title}${track.artist ? ` — ${track.artist}` : ''}`;
+    });
+    const title = this.queue.playlistTitle();
+    const text = (title ? `${title}\n\n` : '') + lines.join('\n');
+    navigator.clipboard.writeText(text).then(() => {
+      this.exportCopied.set(true);
+      setTimeout(() => this.exportCopied.set(false), 2000);
+    });
+  }
+
+  private formatTimestamp(seconds: number): string {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return h > 0
+      ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+      : `${m}:${s.toString().padStart(2, '0')}`;
   }
 
   onPlayNext(index: number): void {

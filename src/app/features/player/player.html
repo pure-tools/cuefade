@@ -35,6 +35,15 @@
       <div class="flex-1 p-4">
         <app-player-stage class="block h-full" />
       </div>
+      @if (!gates.noAds()) {
+        <div class="flex items-center justify-between px-5 py-2 bg-zinc-800/60 border-t border-zinc-800 text-xs text-zinc-500">
+          <span>Remove ads and unlock all features with <strong class="text-yellow-400">CueFade Pro</strong></span>
+          <button
+            class="ml-4 text-xs font-semibold text-yellow-400 hover:underline flex-shrink-0"
+            (click)="upgrade.open()"
+          >Upgrade →</button>
+        </div>
+      }
       <app-transport (playPause)="onPlayPause()" />
     </div>
 
