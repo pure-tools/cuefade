@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     { provide: MUSIC_PROVIDERS, useClass: SoundCloudProvider, multi: true },
 
     provideResponsive({ strategy: 'combination' }),
-    providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey }),
+    providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey, productId: environment.stripePriceId }),
     provideTheme(),
   ],
 };

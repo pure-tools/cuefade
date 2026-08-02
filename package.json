@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:api": "vitest run --config vitest.node.config.ts",
+    "test:all": "npm run test -- --run && npm run test:api"
   },
   "prettier": {
     "printWidth": 100,

@@ -28,7 +28,6 @@ describe('CrossfadeService', () => {
 
   it('should have default signal values', () => {
     expect(service.transitionDuration()).toBe(20);
-    expect(service.transitionPoint()).toBe(30);
     expect(service.volumeA()).toBe(100);
     expect(service.volumeB()).toBe(0);
     expect(service.opacityA()).toBe(1);
@@ -62,9 +61,9 @@ describe('CrossfadeService', () => {
     expect(startSpy).toHaveBeenCalled();
   });
 
-  it('onTimeUpdate triggers fade at transitionPoint by default', () => {
+  it('onTimeUpdate triggers fade at transitionDuration by default', () => {
     queue.setTracks([makeTrack('a'), makeTrack('b')]);
-    service.transitionPoint.set(30);
+    service.transitionDuration.set(30);
     const startSpy = vi.spyOn(service, 'startCrossfade');
     service.onTimeUpdate(270, 300); // 300 - 30 = 270
     expect(startSpy).toHaveBeenCalled();
