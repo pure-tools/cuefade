@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { QueueService } from '../../core/services/queue.service';
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { Track } from '../../core/interfaces/track';
@@ -24,6 +25,7 @@ export class HomeComponent {
   private queue = inject(QueueService);
   private router = inject(Router);
   private session = inject(SessionStorageService);
+  private titleService = inject(Title);
   readonly auth = inject(AuthService);
 
   tracks = signal<Track[]>([]);
@@ -57,6 +59,9 @@ export class HomeComponent {
     this.restoredUrl.set(event.url);
     this.playlistTitle.set(event.title);
     this.tracks.set(event.tracks);
+    if (event.title) {
+      this.titleService.setTitle(`${event.title} — CueFade`);
+    }
     this.selectedIds.set(new Set(
       event.tracks.filter(t => t.embeddable !== false).map(t => t.id)
     ));
@@ -67,6 +72,7 @@ export class HomeComponent {
     this.selectedIds.set(new Set());
     this.playlistTitle.set('');
     this.restoredUrl.set('');
+    this.titleService.setTitle('CueFade — Create Your Own Mix');
   }
 
   onSelectionChange(ids: Set<string>): void {
@@ -74,7 +80,7 @@ export class HomeComponent {
   }
 
   onStartMix(tracks: Track[]): void {
-    this.queue.setTracks(tracks);
+    this.queue.setTracks(tracks, this.playlistTitle());
     this.router.navigate(['/player']);
   }
 

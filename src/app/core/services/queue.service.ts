@@ -10,6 +10,7 @@ export class QueueService {
 
   readonly tracks = signal<Track[]>([]);
   readonly currentIndex = signal<number>(0);
+  readonly playlistTitle = signal<string>('');
   readonly nextIndex = computed(() => this.currentIndex() + 1);
 
   readonly currentTrack = computed(() => this.tracks()[this.currentIndex()] ?? null);
@@ -36,9 +37,10 @@ export class QueueService {
   readonly nextTrack = computed(() => this.tracks()[this.nextIndex()] ?? null);
   readonly hasNext = computed(() => this.nextIndex() < this.tracks().length);
 
-  setTracks(tracks: Track[]): void {
+  setTracks(tracks: Track[], title?: string): void {
     this.tracks.set(tracks);
     this.currentIndex.set(0);
+    if (title !== undefined) this.playlistTitle.set(title);
   }
 
   addTracks(tracks: Track[]): void {
