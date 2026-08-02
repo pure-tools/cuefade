@@ -67,4 +67,19 @@ describe('QueueService', () => {
     expect(service.currentTrack()?.id).toBe('a');
     expect(service.nextTrack()?.id).toBe('b');
   });
+
+  it('playlistTitle starts empty', () => {
+    expect(service.playlistTitle()).toBe('');
+  });
+
+  it('setTracks with title updates playlistTitle', () => {
+    service.setTracks([makeTrack('a')], 'My Mix');
+    expect(service.playlistTitle()).toBe('My Mix');
+  });
+
+  it('setTracks without title leaves playlistTitle unchanged', () => {
+    service.setTracks([makeTrack('a')], 'Initial Title');
+    service.setTracks([makeTrack('b')]);
+    expect(service.playlistTitle()).toBe('Initial Title');
+  });
 });
