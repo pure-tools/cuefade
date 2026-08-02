@@ -80,7 +80,11 @@ export class HomeComponent {
   }
 
   onStartMix(tracks: Track[]): void {
-    this.queue.setTracks(tracks, this.playlistTitle());
+    const currentIds = this.queue.tracks().map(t => t.id).join(',');
+    const incomingIds = tracks.map(t => t.id).join(',');
+    if (currentIds !== incomingIds) {
+      this.queue.setTracks(tracks, this.playlistTitle());
+    }
     this.router.navigate(['/player']);
   }
 
