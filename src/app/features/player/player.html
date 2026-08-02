@@ -35,7 +35,7 @@
       <div class="flex-1 p-4">
         <app-player-stage class="block h-full" />
       </div>
-      <app-transport (playPause)="onPlayPause()" />
+      <app-transport (playPause)="onPlayPause()" (showUpgrade)="onShowUpgrade()" />
     </div>
 
     <!-- Mobile backdrop -->
@@ -60,3 +60,12 @@
     </aside>
   </div>
 </div>
+
+<app-pricing-modal
+  [visible]="showPricing()"
+  (close)="showPricing.set(false)"
+  (requireAuth)="onRequireAuth()"
+/>
+@if (showAuth()) {
+  <app-auth-modal (close)="showAuth.set(false)" (success)="showAuth.set(false)" />
+}

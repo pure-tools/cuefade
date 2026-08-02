@@ -33,11 +33,24 @@
 
     <!-- Fade now button -->
     <button
-      class="text-sm font-medium px-5 py-2.5 rounded-lg border border-zinc-700 text-zinc-300 hover:border-yellow-400 hover:text-yellow-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+      class="relative text-sm font-medium px-5 py-2.5 rounded-lg border transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+      [class.border-zinc-700]="!gates.canUseFade()"
+      [class.text-zinc-500]="!gates.canUseFade()"
+      [class.border-yellow-400]="gates.canUseFade() && queue.hasNext()"
+      [class.text-yellow-400]="gates.canUseFade() && queue.hasNext()"
+      [class.border-zinc-700]="gates.canUseFade() && !queue.hasNext()"
+      [class.text-zinc-300]="gates.canUseFade() && !queue.hasNext()"
+      [class.hover:border-yellow-400]="gates.canUseFade()"
+      [class.hover:text-yellow-400]="gates.canUseFade()"
       (click)="triggerCrossfade()"
-      [disabled]="!queue.hasNext()"
-      title="Crossfade to next track now"
-    >Fade →</button>
+      [disabled]="gates.canUseFade() && !queue.hasNext()"
+      [title]="gates.canUseFade() ? 'Crossfade to next track now' : 'Upgrade to Pro to use crossfade'"
+    >
+      Fade →
+      @if (!gates.canUseFade()) {
+        <span class="ml-1.5 text-xs font-semibold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded">PRO</span>
+      }
+    </button>
 
     <!-- Fade duration — desktop only inline -->
     <div class="hidden md:flex items-center gap-1.5">

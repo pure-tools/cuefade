@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QueueService } from '../../../../core/services/queue.service';
 import { CrossfadeService } from '../../../../core/services/crossfade.service';
 import { YouTubePlayerService } from '../../../../core/providers/youtube/youtube-player.service';
+import { FeatureGateService } from '../../../../core/services/feature-gate.service';
 
 @Component({
   selector: 'app-transport',
@@ -14,10 +15,12 @@ import { YouTubePlayerService } from '../../../../core/providers/youtube/youtube
 export class TransportComponent {
   readonly queue = inject(QueueService);
   readonly crossfade = inject(CrossfadeService);
+  readonly gates = inject(FeatureGateService);
   private ytPlayer = inject(YouTubePlayerService);
 
   playPause = output();
   manualCrossfade = output();
+  showUpgrade = output();
 
   readonly isPlaying = this.ytPlayer.isPlaying;
 
@@ -27,6 +30,10 @@ export class TransportComponent {
   }
 
   triggerCrossfade(): void {
+    if (!this.gates.canUseFade()) {
+      this.showUpgrade.emit();
+      return;
+    }
     this.crossfade.startCrossfade();
     this.manualCrossfade.emit();
   }
