@@ -104,6 +104,72 @@ describe('HomeComponent', () => {
     });
   });
 
+  describe('checkNewMix (?new=1)', () => {
+    it('clears tracks and title when ?new=1 present', () => {
+      vi.stubGlobal('location', { search: '?new=1', pathname: '/', href: 'http://localhost/?new=1' });
+      vi.stubGlobal('history', { replaceState: vi.fn() });
+      TestBed.configureTestingModule({
+        imports: [HomeComponent],
+        providers: [
+          provideRouter([]),
+          { provide: AuthService, useValue: mockAuth },
+          { provide: Title, useValue: mockTitleService },
+          { provide: QueueService, useValue: mockQueueService },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      });
+      TestBed.overrideComponent(HomeComponent, { set: { template: '<div></div>', imports: [] } });
+      mockQueueService.tracks.set([makeTrack('a'), makeTrack('b')]);
+
+      const fixture = TestBed.createComponent(HomeComponent);
+
+      expect(fixture.componentInstance.tracks()).toEqual([]);
+      expect(fixture.componentInstance.playlistTitle()).toBe('');
+    });
+
+    it('does not clear tracks when ?new=1 absent', () => {
+      vi.stubGlobal('location', { search: '', pathname: '/', href: 'http://localhost/' });
+      TestBed.configureTestingModule({
+        imports: [HomeComponent],
+        providers: [
+          provideRouter([]),
+          { provide: AuthService, useValue: mockAuth },
+          { provide: Title, useValue: mockTitleService },
+          { provide: QueueService, useValue: mockQueueService },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      });
+      TestBed.overrideComponent(HomeComponent, { set: { template: '<div></div>', imports: [] } });
+
+      const fixture = TestBed.createComponent(HomeComponent);
+      fixture.componentInstance.tracks.set([makeTrack('a')]);
+
+      fixture.componentInstance.onPlaylistLoaded({ url: 'u', title: 'Mix', tracks: [makeTrack('a')] });
+      expect(fixture.componentInstance.tracks().length).toBe(1);
+    });
+
+    it('strips ?new=1 from address bar', () => {
+      vi.stubGlobal('location', { search: '?new=1', pathname: '/p', href: 'http://localhost/p?new=1' });
+      const replaceState = vi.fn();
+      vi.stubGlobal('history', { replaceState });
+      TestBed.configureTestingModule({
+        imports: [HomeComponent],
+        providers: [
+          provideRouter([]),
+          { provide: AuthService, useValue: mockAuth },
+          { provide: Title, useValue: mockTitleService },
+          { provide: QueueService, useValue: mockQueueService },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      });
+      TestBed.overrideComponent(HomeComponent, { set: { template: '<div></div>', imports: [] } });
+
+      TestBed.createComponent(HomeComponent);
+
+      expect(replaceState).toHaveBeenCalledWith({}, '', '/p');
+    });
+  });
+
   it('calls refreshProfile when ?upgraded=1 in URL', () => {
     vi.stubGlobal('location', {
       search: '?upgraded=1',
