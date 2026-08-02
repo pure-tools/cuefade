@@ -28,6 +28,9 @@ export class YouTubePlayerService implements OnDestroy {
   readonly stateChange$ = new Subject<{ slot: PlayerSlot; state: PlayerState }>();
   readonly isPlaying = signal(false);
 
+  readonly activeSlot = signal<PlayerSlot>('A');
+  resumeTime: number | null = null;
+
   private rafId: number | null = null;
   private destroyed = false;
 
@@ -53,7 +56,15 @@ export class YouTubePlayerService implements OnDestroy {
     document.head.appendChild(tag);
   }
 
+  savePlaybackState(): void {
+    this.resumeTime = this.getCurrentTime(this.activeSlot());
+  }
+
   createPlayer(slot: PlayerSlot, elementId: string): Promise<void> {
+    if (this.players[slot]) {
+      try { this.players[slot]!.destroy(); } catch { /* DOM element may already be gone */ }
+      delete this.players[slot];
+    }
     return new Promise(resolve => {
       const create = () => {
         this.players[slot] = new window.YT.Player(elementId, {

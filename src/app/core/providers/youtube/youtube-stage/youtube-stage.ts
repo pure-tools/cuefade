@@ -22,8 +22,6 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
   private queue = inject(QueueService);
   private registry = inject(ProviderRegistryService);
 
-  activeSlot = signal<PlayerSlot>('A');
-
   // Add-track overlay state
   showAddInput = signal(false);
   addUrl = '';
@@ -32,14 +30,13 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
 
   /**
    * CrossfadeService uses opacityA = active track, opacityB = incoming track.
-   * After each fade the active slot alternates (A→B→A…), so we must swap
-   * which physical player div receives which opacity value.
+   * activeSlot lives in the service so it survives route navigation.
    */
   readonly opacityForA = computed(() =>
-    this.activeSlot() === 'A' ? this.crossfade.opacityA() : this.crossfade.opacityB()
+    this.ytPlayer.activeSlot() === 'A' ? this.crossfade.opacityA() : this.crossfade.opacityB()
   );
   readonly opacityForB = computed(() =>
-    this.activeSlot() === 'B' ? this.crossfade.opacityA() : this.crossfade.opacityB()
+    this.ytPlayer.activeSlot() === 'B' ? this.crossfade.opacityA() : this.crossfade.opacityB()
   );
 
   private subs: Subscription[] = [];
@@ -49,7 +46,6 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
     this.registerVolumeEffects();
   }
 
-  /** Reload the hidden player whenever the next track changes (drag-drop reorder). */
   private registerPreloadEffect(): void {
     effect(() => {
       const next = this.queue.nextTrack();
@@ -61,14 +57,13 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
     });
   }
 
-  /** Keep both player volumes in sync with the crossfade animation (runs every rAF frame). */
   private registerVolumeEffects(): void {
-    effect(() => this.ytPlayer.setVolume(this.activeSlot(), this.crossfade.volumeA()));
+    effect(() => this.ytPlayer.setVolume(this.ytPlayer.activeSlot(), this.crossfade.volumeA()));
     effect(() => this.ytPlayer.setVolume(this.hiddenSlot(), this.crossfade.volumeB()));
   }
 
   private hiddenSlot(): PlayerSlot {
-    return this.activeSlot() === 'A' ? 'B' : 'A';
+    return this.ytPlayer.activeSlot() === 'A' ? 'B' : 'A';
   }
 
   ngOnInit(): void {
@@ -76,15 +71,17 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
       this.ytPlayer.createPlayer('A', 'yt-player-a'),
       this.ytPlayer.createPlayer('B', 'yt-player-b'),
     ]).then(() => {
+      if (this.ytPlayer.resumeTime === null) {
+        this.ytPlayer.activeSlot.set('A');
+      }
       this.loadCurrentTrack();
       this.preloadNext();
       this.ytPlayer.startPolling();
     });
 
-    // Drive crossfade timing from active player's time updates
     this.subs.push(
       this.ytPlayer.timeUpdate$.subscribe(ev => {
-        if (ev.slot === this.activeSlot()) {
+        if (ev.slot === this.ytPlayer.activeSlot()) {
           this.crossfade.onTimeUpdate(ev.currentTime, ev.duration);
         }
       })
@@ -93,12 +90,10 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.crossfade.crossfadeEvents$.subscribe(ev => {
         if (ev.type === 'started') {
-          // Start the hidden player now — it was only cued, not playing
           this.ytPlayer.play(this.hiddenSlot());
         }
         if (ev.type === 'completed') {
-          // Hidden slot becomes the new active slot
-          this.activeSlot.set(this.hiddenSlot());
+          this.ytPlayer.activeSlot.set(this.hiddenSlot());
           this.preloadNext();
         }
       })
@@ -108,9 +103,11 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
   private loadCurrentTrack(): void {
     const track = this.queue.currentTrack();
     if (!track) return;
-    const slot = this.activeSlot();
+    const slot = this.ytPlayer.activeSlot();
+    const startAt = this.ytPlayer.resumeTime ?? track.cueIn ?? 0;
+    this.ytPlayer.resumeTime = null;
     this.ytPlayer.setVolume(slot, 100);
-    this.ytPlayer.playTrack(slot, track.id, track.cueIn ?? 0);
+    this.ytPlayer.playTrack(slot, track.id, startAt);
   }
 
   private preloadNext(): void {
@@ -145,6 +142,7 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.ytPlayer.savePlaybackState();
     this.ytPlayer.stopPolling();
     this.subs.forEach(s => s.unsubscribe());
   }

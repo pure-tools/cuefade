@@ -27,9 +27,9 @@ const mockTitleService = { setTitle: mockSetTitle };
 const mockSetTracks = vi.fn();
 const mockQueueService = {
   setTracks: mockSetTracks,
-  tracks: signal([]),
+  tracks: signal<Track[]>([]),
   currentIndex: signal(0),
-  currentTrack: signal(null),
+  currentTrack: signal<Track | null>(null),
   playlistTitle: signal(''),
   hasNext: signal(false),
 };
@@ -84,6 +84,23 @@ describe('HomeComponent', () => {
       const tracks = [makeTrack('a'), makeTrack('b')];
       fixture.componentInstance.onStartMix(tracks);
       expect(mockSetTracks).toHaveBeenCalledWith(tracks, 'Summer Set');
+    });
+
+    it('onStartMix skips setTracks when same tracks already in queue', () => {
+      const tracks = [makeTrack('a'), makeTrack('b')];
+      mockQueueService.tracks.set(tracks);
+      const fixture = createHome();
+      fixture.componentInstance.onStartMix(tracks);
+      expect(mockSetTracks).not.toHaveBeenCalled();
+    });
+
+    it('onStartMix calls setTracks when tracks differ from queue', () => {
+      const queueTracks = [makeTrack('a'), makeTrack('b')];
+      const newTracks = [makeTrack('a'), makeTrack('c')];
+      mockQueueService.tracks.set(queueTracks);
+      const fixture = createHome();
+      fixture.componentInstance.onStartMix(newTracks);
+      expect(mockSetTracks).toHaveBeenCalled();
     });
   });
 
