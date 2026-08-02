@@ -18,5 +18,5 @@
     </mask>
   </defs>
 
-  <circle cx="105" cy="105" r="105" fill="white" mask="url(#cutout)"/>
+  <circle cx="105" cy="105" r="105" fill="#facc15" mask="url(#cutout)"/>
 </svg>
