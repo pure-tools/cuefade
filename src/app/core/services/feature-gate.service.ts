@@ -11,4 +11,5 @@ export class FeatureGateService {
   readonly canUseCuePoints = computed(() => this.auth.isPro());
   readonly canExportMix = computed(() => this.auth.isPro());
   readonly canUseFade = computed(() => this.auth.isPro());
+  readonly canAddToQueue = computed(() => this.auth.isPro());
 }

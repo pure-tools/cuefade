@@ -35,9 +35,11 @@
     @if (!showAddInput()) {
       <button
         class="w-8 h-8 rounded-full bg-black/60 text-white text-xl leading-none flex items-center justify-center hover:bg-black/80 transition-colors"
-        (click)="showAddInput.set(true); addError.set('')"
-        title="Insert track after current"
-      >+</button>
+        (click)="requestAddTrack()"
+        [title]="gates.canAddToQueue() ? 'Insert track after current' : 'Upgrade to Pro to add tracks while mixing'"
+      >
+        @if (gates.canAddToQueue()) { + } @else { <span class="text-xs font-bold text-yellow-400">PRO</span> }
+      </button>
     } @else {
       <div class="flex items-center gap-2 bg-zinc-900/95 rounded-lg px-3 py-2 shadow-xl border border-zinc-700">
         <input

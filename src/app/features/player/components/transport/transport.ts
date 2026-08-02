@@ -4,6 +4,7 @@ import { QueueService } from '../../../../core/services/queue.service';
 import { CrossfadeService } from '../../../../core/services/crossfade.service';
 import { YouTubePlayerService } from '../../../../core/providers/youtube/youtube-player.service';
 import { FeatureGateService } from '../../../../core/services/feature-gate.service';
+import { UpgradePromptService } from '../../../../core/services/upgrade-prompt.service';
 
 @Component({
   selector: 'app-transport',
@@ -17,10 +18,10 @@ export class TransportComponent {
   readonly crossfade = inject(CrossfadeService);
   readonly gates = inject(FeatureGateService);
   private ytPlayer = inject(YouTubePlayerService);
+  private upgradePrompt = inject(UpgradePromptService);
 
   playPause = output();
   manualCrossfade = output();
-  showUpgrade = output();
 
   readonly isPlaying = this.ytPlayer.isPlaying;
 
@@ -31,7 +32,7 @@ export class TransportComponent {
 
   triggerCrossfade(): void {
     if (!this.gates.canUseFade()) {
-      this.showUpgrade.emit();
+      this.upgradePrompt.open();
       return;
     }
     this.crossfade.startCrossfade();

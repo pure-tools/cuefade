@@ -8,6 +8,8 @@ import { YouTubePlayerService, PlayerSlot } from '../youtube-player.service';
 import { CrossfadeService } from '../../../services/crossfade.service';
 import { QueueService } from '../../../services/queue.service';
 import { ProviderRegistryService } from '../../../services/provider-registry.service';
+import { FeatureGateService } from '../../../services/feature-gate.service';
+import { UpgradePromptService } from '../../../services/upgrade-prompt.service';
 
 @Component({
   selector: 'app-youtube-stage',
@@ -21,6 +23,8 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
   readonly crossfade = inject(CrossfadeService);
   private queue = inject(QueueService);
   private registry = inject(ProviderRegistryService);
+  readonly gates = inject(FeatureGateService);
+  private upgradePrompt = inject(UpgradePromptService);
 
   // Add-track overlay state
   showAddInput = signal(false);
@@ -115,6 +119,15 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
     if (!next) return;
     this.ytPlayer.loadTrack(this.hiddenSlot(), next.id, next.cueIn ?? 0);
     this.ytPlayer.setVolume(this.hiddenSlot(), 0);
+  }
+
+  requestAddTrack(): void {
+    if (!this.gates.canAddToQueue()) {
+      this.upgradePrompt.open();
+      return;
+    }
+    this.showAddInput.set(true);
+    this.addError.set('');
   }
 
   insertTrack(): void {
