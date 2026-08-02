@@ -6,22 +6,50 @@
       (click)="goHome()"
     >← Back</button>
     <span class="text-yellow-400 font-bold tracking-widest text-sm uppercase">CueFade</span>
-    <span class="text-zinc-600 text-sm">{{ queue.tracks().length }} tracks in queue</span>
+    <span class="text-zinc-600 text-sm">{{ queue.tracks().length }} tracks</span>
+
+    <!-- Queue toggle — mobile only -->
+    <button
+      class="ml-auto md:hidden flex items-center gap-1.5 text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-400 hover:border-yellow-400 hover:text-yellow-400 transition-colors"
+      (click)="toggleQueue()"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="15" y2="18"/>
+      </svg>
+      Queue
+    </button>
   </header>
 
-  <!-- Main layout: stage + queue -->
-  <div class="flex flex-1 overflow-hidden">
-    <!-- Video stage -->
+  <!-- Main layout -->
+  <div class="flex flex-1 overflow-hidden relative">
+    <!-- Video stage + transport -->
     <div class="flex flex-col flex-1 overflow-hidden">
       <div class="flex-1 p-4">
         <app-player-stage class="block h-full" />
       </div>
-      <!-- Transport bar -->
       <app-transport (playPause)="onPlayPause()" />
     </div>
 
-    <!-- Queue sidebar -->
-    <aside class="w-80 flex-shrink-0 border-l border-zinc-800">
+    <!-- Mobile backdrop -->
+    @if (mobile.isMobile() && showQueue()) {
+      <div
+        class="absolute inset-0 bg-black/60 z-10"
+        (click)="toggleQueue()"
+      ></div>
+    }
+
+    <!-- Queue panel: sidebar on desktop, slide-up sheet on mobile -->
+    <aside
+      class="absolute inset-x-0 bottom-0 h-[65vh] z-20 transition-transform duration-300
+             md:relative md:h-auto md:w-80 md:flex-shrink-0 md:border-l md:border-zinc-800 md:translate-y-0"
+      [class.translate-y-full]="!showQueue()"
+    >
+      <!-- Mobile drag handle -->
+      <div class="flex justify-center pt-2 pb-1 md:hidden bg-zinc-900 rounded-t-2xl">
+        <div class="w-10 h-1 rounded-full bg-zinc-700"></div>
+      </div>
       <app-queue-panel class="block h-full" />
     </aside>
   </div>
