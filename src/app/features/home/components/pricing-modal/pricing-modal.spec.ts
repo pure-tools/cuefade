@@ -99,4 +99,29 @@ describe('PricingModalComponent', () => {
     const items = fixture.debugElement.queryAll(By.css('li'));
     expect(items.length).toBe(fixture.componentInstance.proFeatures.length);
   });
+
+  it('displays $10 price', () => {
+    const fixture = TestBed.createComponent(PricingModalComponent);
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.textContent).toContain('$10');
+  });
+
+  it('CTA button shows "Unlock for $10" when not loading', () => {
+    const fixture = TestBed.createComponent(PricingModalComponent);
+    fixture.componentRef.setInput('visible', true);
+    fixture.detectChanges();
+    const btns: NodeListOf<HTMLButtonElement> = fixture.nativeElement.querySelectorAll('button');
+    const cta = Array.from(btns).find(b => b.textContent?.includes('Unlock'));
+    expect(cta?.textContent?.trim()).toBe('Unlock for $10');
+  });
+
+  it('does not render when visible is false', () => {
+    const fixture = TestBed.createComponent(PricingModalComponent);
+    fixture.componentRef.setInput('visible', false);
+    fixture.detectChanges();
+    const modal = fixture.nativeElement.querySelector('.fixed');
+    expect(modal).toBeNull();
+  });
 });
