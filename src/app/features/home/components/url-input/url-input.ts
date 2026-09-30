@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProviderRegistryService } from '../../../../core/services/provider-registry.service';
 import { FeatureGateService } from '../../../../core/services/feature-gate.service';
+import { SanitizeService } from '@pure-tools/babetka';
 import { Track } from '../../../../core/interfaces/track';
 
 const PRO_PROVIDERS = new Set(['spotify', 'soundcloud']);
@@ -23,6 +24,7 @@ export interface PlaylistLoadedEvent {
 export class UrlInputComponent implements OnInit {
   private registry = inject(ProviderRegistryService);
   private gates = inject(FeatureGateService);
+  private sanitize = inject(SanitizeService);
 
   initialUrl = input('');
   loaded = output<PlaylistLoadedEvent>();
@@ -39,6 +41,10 @@ export class UrlInputComponent implements OnInit {
 
   loadPlaylist(): void {
     if (!this.url.trim()) return;
+    if (!this.sanitize.isSafeUrl(this.url.trim())) {
+      this.error.set('Invalid URL — only http/https links are supported.');
+      return;
+    }
     const provider = this.registry.resolve(this.url);
     if (!provider) {
       this.error.set('No provider found for this URL. Supported: YouTube');

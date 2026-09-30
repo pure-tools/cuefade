@@ -1,12 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { App } from './app';
+import { AUTH_PROVIDER, SECURKA_DEFAULTS, SECURKA_CONFIG } from '@pure-tools/babetka';
+
+const mockAuth = { isLoggedIn: signal(false), isPro: signal(false), signOut: async () => {} };
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: AUTH_PROVIDER, useValue: mockAuth },
+        { provide: SECURKA_CONFIG, useValue: SECURKA_DEFAULTS },
+      ],
     }).compileComponents();
   });
 

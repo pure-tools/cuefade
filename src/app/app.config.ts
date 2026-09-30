@@ -17,7 +17,9 @@ import { SoundCloudProvider } from './core/providers/soundcloud/soundcloud.provi
 import { provideResponsive } from '@pure-tools/mobilka';
 import { providePayments } from '@pure-tools/monetka';
 import { provideTheme } from '@pure-tools/paletka';
+import { AUTH_PROVIDER, provideSecurka } from '@pure-tools/babetka';
 import { environment } from '../environments/environment';
+import { AuthService } from './core/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,5 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideResponsive({ strategy: 'combination' }),
     providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey, productId: environment.stripePriceId }),
     provideTheme(),
+    { provide: AUTH_PROVIDER, useExisting: AuthService },
+    provideSecurka(),
   ],
 };
