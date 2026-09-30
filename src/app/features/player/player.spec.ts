@@ -5,9 +5,12 @@ import { signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { MobileService } from '@pure-tools/mobilka';
+import { LicenseService } from '@pure-tools/monetka';
 import { PlayerComponent } from './player';
 import { QueueService } from '../../core/services/queue.service';
 import { Track } from '../../core/interfaces/track';
+
+const mockLicense = { isLicensed: signal(false) };
 
 const makeTrack = (id: string): Track => ({ id, title: `Track ${id}`, thumbnailUrl: '', provider: 'youtube' });
 
@@ -38,6 +41,7 @@ describe('PlayerComponent — browser title effect', () => {
         },
         { provide: MobileService, useValue: { isMobile: signal(false) } },
         { provide: Router, useValue: { navigate: vi.fn() } },
+        { provide: LicenseService, useValue: mockLicense },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

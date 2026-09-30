@@ -3,12 +3,15 @@ import { TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { signal } from '@angular/core';
 import { Subject } from 'rxjs';
+import { LicenseService } from '@pure-tools/monetka';
 import { YouTubeStageComponent } from './youtube-stage';
 import { YouTubePlayerService, PlayerSlot } from '../youtube-player.service';
 import { CrossfadeService } from '../../../services/crossfade.service';
 import { QueueService } from '../../../services/queue.service';
 import { ProviderRegistryService } from '../../../services/provider-registry.service';
 import { Track } from '../../../interfaces/track';
+
+const mockLicense = { isLicensed: signal(false) };
 
 const makeTrack = (id: string, cueIn?: number): Track => ({
   id, title: `Track ${id}`, thumbnailUrl: '', provider: 'youtube', cueIn,
@@ -78,6 +81,7 @@ describe('YouTubeStageComponent', () => {
           },
         },
         { provide: ProviderRegistryService, useValue: { resolve: vi.fn() } },
+        { provide: LicenseService, useValue: mockLicense },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

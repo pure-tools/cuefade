@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@pure-tools/babetka';
+import { licenseGuard } from '@pure-tools/monetka';
 
 export const routes: Routes = [
   {
@@ -9,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'player',
-    canActivate: [authGuard],
+    canActivate: [authGuard, licenseGuard],
     loadComponent: () =>
       import('./features/player/player').then(m => m.PlayerComponent),
   },

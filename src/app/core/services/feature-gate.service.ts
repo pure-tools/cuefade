@@ -1,18 +1,18 @@
-import { Injectable, computed, inject } from '@angular/core';
-import { AuthService } from './auth.service';
+import { Injectable, inject } from '@angular/core';
+import { LicenseService } from '@pure-tools/monetka';
 
 @Injectable({ providedIn: 'root' })
 export class FeatureGateService {
-  private auth = inject(AuthService);
+  private license = inject(LicenseService);
 
-  readonly canUseSpotify = computed(() => this.auth.isPro());
-  readonly canUseSoundCloud = computed(() => this.auth.isPro());
-  readonly canAddMultipleSources = computed(() => this.auth.isPro());
-  readonly canUseCuePoints = computed(() => this.auth.isPro());
-  readonly canExportMix = computed(() => this.auth.isPro());
-  readonly canUseFade = computed(() => this.auth.isPro());
-  readonly canAddToQueue = computed(() => this.auth.isPro());
-  readonly canUseExtendedFadeDurations = computed(() => this.auth.isPro());
-  readonly noAds = computed(() => this.auth.isPro());
-  readonly canExportPlaylist = computed(() => this.auth.isPro());
+  readonly canUseSpotify = this.license.isLicensed;
+  readonly canUseSoundCloud = this.license.isLicensed;
+  readonly canAddMultipleSources = this.license.isLicensed;
+  readonly canUseCuePoints = this.license.isLicensed;
+  readonly canExportMix = this.license.isLicensed;
+  readonly canUseFade = this.license.isLicensed;
+  readonly canAddToQueue = this.license.isLicensed;
+  readonly canUseExtendedFadeDurations = this.license.isLicensed;
+  readonly noAds = this.license.isLicensed;
+  readonly canExportPlaylist = this.license.isLicensed;
 }
