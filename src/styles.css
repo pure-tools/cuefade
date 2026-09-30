@@ -34,3 +34,11 @@
     --pt-shadow: rgba(0, 0, 0, 0.7);
   }
 }
+
+/* Native apps: while the on-screen keyboard is open (mobilka KeyboardService → body.keyboard-open),
+   let the mobile queue sheet take the full height so its text inputs stay visible. */
+@media (max-width: 767px) {
+  body.keyboard-open .queue-sheet {
+    height: 100%;
+  }
+}

@@ -7,4 +7,8 @@ export const environment = {
   supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYnBib3N2ZGRldmlmYXVna2R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNjUwNjksImV4cCI6MjEwMDg0MTA2OX0.HMtbhlnxSat-AqDEIdHJJFZjacg_EhEEkzX9qZxJHHY',
   // TODO: set from https://cloud.umami.is → Settings → Websites
   umamiWebsiteId: '',
+  // TODO: RevenueCat → Project → API keys (appl_… / goog_…)
+  revenuecatAppleKey: '',
+  revenuecatGoogleKey: '',
+  iapProductId: 'pro_lifetime',
 };

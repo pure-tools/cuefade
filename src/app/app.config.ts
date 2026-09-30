@@ -16,6 +16,9 @@ import { SpotifyProvider } from './core/providers/spotify/spotify.provider';
 import { SoundCloudProvider } from './core/providers/soundcloud/soundcloud.provider';
 import { provideResponsive } from '@pure-tools/mobilka';
 import { providePayments } from '@pure-tools/monetka';
+import { provideNative } from '@pure-tools/mobilka/native';
+import { paymentsConfig } from './core/payments.config';
+import { provideNativeFeedback } from './core/native/native-feedback';
 import { provideTheme } from '@pure-tools/paletka';
 import { AUTH_PROVIDER, provideSecurka } from '@pure-tools/babetka';
 import {
@@ -38,7 +41,8 @@ export const appConfig: ApplicationConfig = {
     { provide: MUSIC_PROVIDERS, useClass: SoundCloudProvider, multi: true },
 
     provideResponsive({ strategy: 'combination' }),
-    providePayments({ provider: 'stripe', publicKey: environment.stripePublicKey, productId: environment.stripePriceId }),
+    // Stripe on the web, App Store / Google Play billing in the native apps
+    providePayments(paymentsConfig(environment)),
     provideTheme(),
     { provide: AUTH_PROVIDER, useExisting: AuthService },
     provideSecurka(),
@@ -51,5 +55,9 @@ export const appConfig: ApplicationConfig = {
     providePageViewTracking(),
     provideErrorTracking(),
     provideCuefadeAnalytics(environment.umamiWebsiteId),
+
+    // Capacitor bridge — every call is a no-op in the browser
+    provideNative(),
+    provideNativeFeedback(),
   ],
 };
