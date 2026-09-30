@@ -35,7 +35,7 @@
     "@angular/router": "^22.0.0",
     "@paddle/paddle-js": "^1.6.4",
     "@pure-tools/babetka": "^0.1.0",
-    "@pure-tools/mobilka": "^0.3.1",
+    "@pure-tools/mobilka": "^0.4.0",
     "@pure-tools/monetka": "^0.3.1",
     "@pure-tools/paletka": "^0.1.1",
     "@supabase/supabase-js": "^2.111.0",
