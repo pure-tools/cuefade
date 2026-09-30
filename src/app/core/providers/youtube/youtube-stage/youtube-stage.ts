@@ -123,7 +123,7 @@ export class YouTubeStageComponent implements OnInit, OnDestroy {
 
   requestAddTrack(): void {
     if (!this.gates.canAddToQueue()) {
-      this.upgradePrompt.open();
+      this.upgradePrompt.open('add_to_queue');
       return;
     }
     this.showAddInput.set(true);

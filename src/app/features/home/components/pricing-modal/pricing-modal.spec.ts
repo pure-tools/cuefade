@@ -5,6 +5,9 @@ import { By } from '@angular/platform-browser';
 import { PricingModalComponent } from './pricing-modal';
 import { PaymentService } from '@pure-tools/monetka';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AnalyticsService } from '@pure-tools/slushalka';
+
+const mockAnalytics = { track: vi.fn(), page: vi.fn(), identify: vi.fn(), reset: vi.fn(), setSuperProps: vi.fn() };
 
 const isLoggedIn = signal(false);
 const user = signal<{ id: string; email: string } | null>(null);
@@ -23,6 +26,7 @@ describe('PricingModalComponent', () => {
     TestBed.configureTestingModule({
       imports: [PricingModalComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         { provide: AuthService, useValue: mockAuth },
         { provide: PaymentService, useValue: mockPayment },
       ],
@@ -44,6 +48,12 @@ describe('PricingModalComponent', () => {
     expect(mockOpenCheckout).not.toHaveBeenCalled();
   });
 
+  it('does not track checkout_started when not logged in', async () => {
+    const fixture = TestBed.createComponent(PricingModalComponent);
+    await fixture.componentInstance.unlock();
+    expect(mockAnalytics.track).not.toHaveBeenCalled();
+  });
+
   it('calls openCheckout with user details when logged in', async () => {
     isLoggedIn.set(true);
     user.set({ id: 'user-123', email: 'test@cuefade.app' });
@@ -60,6 +70,7 @@ describe('PricingModalComponent', () => {
         successUrl: expect.stringContaining('upgraded=1'),
       })
     );
+    expect(mockAnalytics.track).toHaveBeenCalledWith('checkout_started');
   });
 
   it('sets error signal when openCheckout throws', async () => {
@@ -74,6 +85,7 @@ describe('PricingModalComponent', () => {
 
     expect(fixture.componentInstance.error()).toBe('Network error');
     expect(fixture.componentInstance.loading()).toBe(false);
+    expect(mockAnalytics.track).toHaveBeenCalledWith('checkout_failed');
   });
 
   it('sets loading true during checkout and false after', async () => {

@@ -1,6 +1,7 @@
 import { Component, input, output, signal, inject } from '@angular/core';
 import { PaymentService } from '@pure-tools/monetka';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AnalyticsService } from '@pure-tools/slushalka';
 
 const KOFI_URL = 'https://ko-fi.com/TODO';
 
@@ -12,6 +13,7 @@ const KOFI_URL = 'https://ko-fi.com/TODO';
 export class PricingModalComponent {
   private payment = inject(PaymentService);
   private auth = inject(AuthService);
+  private analytics = inject(AnalyticsService);
 
   visible = input(false);
   close = output();
@@ -38,6 +40,7 @@ export class PricingModalComponent {
     }
     this.loading.set(true);
     this.error.set('');
+    this.analytics.track('checkout_started');
     try {
       await this.payment.openCheckout({
         userId: this.auth.user()?.id,
@@ -47,6 +50,7 @@ export class PricingModalComponent {
       });
     } catch (e) {
       this.error.set((e as Error).message ?? 'Checkout failed');
+      this.analytics.track('checkout_failed');
       this.loading.set(false);
     }
   }

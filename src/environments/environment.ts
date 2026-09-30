@@ -8,4 +8,6 @@ export const environment = {
   // Keys at: https://supabase.com/dashboard → project → Settings → API
   supabaseUrl: 'https://wqbpbosvddevifaugkdy.supabase.co',
   supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYnBib3N2ZGRldmlmYXVna2R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyNjUwNjksImV4cCI6MjEwMDg0MTA2OX0.HMtbhlnxSat-AqDEIdHJJFZjacg_EhEEkzX9qZxJHHY',
+  // Umami website id — empty in dev (console adapter logs events instead)
+  umamiWebsiteId: '',
 };

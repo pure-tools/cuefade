@@ -18,6 +18,11 @@ import { provideResponsive } from '@pure-tools/mobilka';
 import { providePayments } from '@pure-tools/monetka';
 import { provideTheme } from '@pure-tools/paletka';
 import { AUTH_PROVIDER, provideSecurka } from '@pure-tools/babetka';
+import {
+  provideSlushalka, providePageViewTracking, provideErrorTracking,
+  umamiAdapter, consoleAdapter,
+} from '@pure-tools/slushalka';
+import { provideCuefadeAnalytics } from './core/analytics/cuefade-analytics';
 import { environment } from '../environments/environment';
 import { AuthService } from './core/services/auth.service';
 
@@ -37,5 +42,14 @@ export const appConfig: ApplicationConfig = {
     provideTheme(),
     { provide: AUTH_PROVIDER, useExisting: AuthService },
     provideSecurka(),
+
+    // Analytics — console in dev, Umami in prod (no-op until umamiWebsiteId is set)
+    provideSlushalka({
+      adapters: environment.production ? [umamiAdapter()] : [consoleAdapter()],
+      superProps: { app: 'cuefade' },
+    }),
+    providePageViewTracking(),
+    provideErrorTracking(),
+    provideCuefadeAnalytics(environment.umamiWebsiteId),
   ],
 };

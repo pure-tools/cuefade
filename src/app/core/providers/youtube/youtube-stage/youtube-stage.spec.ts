@@ -10,6 +10,9 @@ import { CrossfadeService } from '../../../services/crossfade.service';
 import { QueueService } from '../../../services/queue.service';
 import { ProviderRegistryService } from '../../../services/provider-registry.service';
 import { Track } from '../../../interfaces/track';
+import { AnalyticsService } from '@pure-tools/slushalka';
+
+const mockAnalytics = { track: vi.fn(), page: vi.fn(), identify: vi.fn(), reset: vi.fn(), setSuperProps: vi.fn() };
 
 const mockLicense = { isLicensed: signal(false) };
 
@@ -59,6 +62,7 @@ describe('YouTubeStageComponent', () => {
     TestBed.configureTestingModule({
       imports: [YouTubeStageComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         { provide: YouTubePlayerService, useValue: mockYtPlayer },
         {
           provide: CrossfadeService,
