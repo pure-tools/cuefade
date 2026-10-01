@@ -28,7 +28,7 @@ export class TrackCardComponent {
 
   toggleExpand(): void {
     if (!this.gates.canUseCuePoints()) {
-      this.upgradePrompt.open();
+      this.upgradePrompt.open('cue_points');
       return;
     }
     this.expanded.update(v => !v);

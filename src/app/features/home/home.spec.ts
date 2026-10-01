@@ -8,6 +8,9 @@ import { HomeComponent } from './home';
 import { AuthService } from '../../core/services/auth.service';
 import { QueueService } from '../../core/services/queue.service';
 import { Track } from '../../core/interfaces/track';
+import { AnalyticsService } from '@pure-tools/slushalka';
+
+const mockAnalytics = { track: vi.fn(), page: vi.fn(), identify: vi.fn(), reset: vi.fn(), setSuperProps: vi.fn() };
 
 const makeTrack = (id: string): Track => ({ id, title: `Track ${id}`, thumbnailUrl: '', provider: 'youtube' });
 
@@ -39,6 +42,7 @@ function createHome() {
   TestBed.configureTestingModule({
     imports: [HomeComponent],
     providers: [
+      { provide: AnalyticsService, useValue: mockAnalytics },
       provideRouter([]),
       { provide: AuthService, useValue: mockAuth },
       { provide: Title, useValue: mockTitleService },
@@ -111,6 +115,7 @@ describe('HomeComponent', () => {
       TestBed.configureTestingModule({
         imports: [HomeComponent],
         providers: [
+          { provide: AnalyticsService, useValue: mockAnalytics },
           provideRouter([]),
           { provide: AuthService, useValue: mockAuth },
           { provide: Title, useValue: mockTitleService },
@@ -132,6 +137,7 @@ describe('HomeComponent', () => {
       TestBed.configureTestingModule({
         imports: [HomeComponent],
         providers: [
+          { provide: AnalyticsService, useValue: mockAnalytics },
           provideRouter([]),
           { provide: AuthService, useValue: mockAuth },
           { provide: Title, useValue: mockTitleService },
@@ -155,6 +161,7 @@ describe('HomeComponent', () => {
       TestBed.configureTestingModule({
         imports: [HomeComponent],
         providers: [
+          { provide: AnalyticsService, useValue: mockAnalytics },
           provideRouter([]),
           { provide: AuthService, useValue: mockAuth },
           { provide: Title, useValue: mockTitleService },
@@ -170,6 +177,13 @@ describe('HomeComponent', () => {
     });
   });
 
+  it('openPricing shows modal and tracks source', () => {
+    const fixture = createHome();
+    fixture.componentInstance.openPricing('header');
+    expect(fixture.componentInstance.showPricing()).toBe(true);
+    expect(mockAnalytics.track).toHaveBeenCalledWith('upgrade_modal_shown', { source: 'header' });
+  });
+
   it('calls refreshProfile when ?upgraded=1 in URL', () => {
     vi.stubGlobal('location', {
       search: '?upgraded=1',
@@ -181,6 +195,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         provideRouter([]),
         { provide: AuthService, useValue: mockAuth },
       ],
@@ -204,6 +219,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         provideRouter([]),
         { provide: AuthService, useValue: mockAuth },
       ],
@@ -227,6 +243,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         provideRouter([]),
         { provide: AuthService, useValue: mockAuth },
       ],

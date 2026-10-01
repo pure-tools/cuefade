@@ -9,6 +9,9 @@ import { LicenseService } from '@pure-tools/monetka';
 import { PlayerComponent } from './player';
 import { QueueService } from '../../core/services/queue.service';
 import { Track } from '../../core/interfaces/track';
+import { AnalyticsService } from '@pure-tools/slushalka';
+
+const mockAnalytics = { track: vi.fn(), page: vi.fn(), identify: vi.fn(), reset: vi.fn(), setSuperProps: vi.fn() };
 
 const mockLicense = { isLicensed: signal(false) };
 
@@ -27,6 +30,7 @@ describe('PlayerComponent — browser title effect', () => {
     TestBed.configureTestingModule({
       imports: [PlayerComponent],
       providers: [
+        { provide: AnalyticsService, useValue: mockAnalytics },
         { provide: Title, useValue: { setTitle: mockSetTitle } },
         {
           provide: QueueService,

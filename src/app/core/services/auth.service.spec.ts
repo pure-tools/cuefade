@@ -149,4 +149,28 @@ describe('AuthService', () => {
     TestBed.resetTestingModule();
     expect(mocks.unsubscribe).toHaveBeenCalled();
   });
+
+  describe('waitForPro', () => {
+    async function loggedIn(): Promise<AuthService> {
+      mocks.getSession.mockResolvedValue(withSession);
+      mocks.single.mockResolvedValue(freeProfile);
+      const service = TestBed.inject(AuthService);
+      await flushAsync();
+      return service;
+    }
+
+    it('resolves true as soon as the webhook has set is_pro', async () => {
+      const service = await loggedIn();
+      mocks.single.mockResolvedValueOnce(freeProfile).mockResolvedValueOnce(proProfile);
+      expect(await service.waitForPro(5, 0)).toBe(true);
+      expect(service.isPro()).toBe(true);
+    });
+
+    it('gives up after the given attempts', async () => {
+      const service = await loggedIn();
+      mocks.single.mockClear();
+      expect(await service.waitForPro(3, 0)).toBe(false);
+      expect(mocks.single).toHaveBeenCalledTimes(3);
+    });
+  });
 });

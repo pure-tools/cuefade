@@ -32,7 +32,7 @@ export class TransportComponent {
 
   triggerCrossfade(): void {
     if (!this.gates.canUseFade()) {
-      this.upgradePrompt.open();
+      this.upgradePrompt.open('crossfade');
       return;
     }
     this.crossfade.startCrossfade();
@@ -41,7 +41,7 @@ export class TransportComponent {
 
   setFadeDuration(seconds: number): void {
     if (!this.gates.canUseExtendedFadeDurations() && seconds > 8) {
-      this.upgradePrompt.open();
+      this.upgradePrompt.open('fade_duration');
       return;
     }
     this.crossfade.setTransitionDuration(seconds);

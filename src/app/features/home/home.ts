@@ -11,6 +11,8 @@ import { TrackPickerComponent } from './components/track-picker/track-picker';
 import { PricingModalComponent } from './components/pricing-modal/pricing-modal';
 import { AuthModalComponent } from '../auth/auth-modal/auth-modal';
 import { AuthService } from '../../core/services/auth.service';
+import type { UpgradeSource } from '../../core/services/upgrade-prompt.service';
+import { AnalyticsService } from '@pure-tools/slushalka';
 
 const HOME_SESSION_KEY = 'cuefade_home';
 
@@ -27,6 +29,7 @@ export class HomeComponent {
   private session = inject(SessionStorageService);
   private titleService = inject(Title);
   readonly auth = inject(AuthService);
+  private analytics = inject(AnalyticsService);
 
   tracks = signal<Track[]>([]);
   playlistTitle = signal('');
@@ -54,6 +57,11 @@ export class HomeComponent {
       this.onClear();
       window.history.replaceState({}, '', window.location.pathname);
     }
+  }
+
+  openPricing(source: UpgradeSource): void {
+    this.showPricing.set(true);
+    this.analytics.track('upgrade_modal_shown', { source });
   }
 
   private checkUpgradeReturn(): void {
