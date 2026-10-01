@@ -8,6 +8,7 @@ import { ProviderRegistryService } from '../../../../core/services/provider-regi
 import { FeatureGateService } from '../../../../core/services/feature-gate.service';
 import { UpgradePromptService } from '../../../../core/services/upgrade-prompt.service';
 import { AnalyticsService } from '@pure-tools/slushalka';
+import { HapticsService } from '@pure-tools/mobilka/native';
 import { TrackCardComponent } from '../track-card/track-card';
 import { Track } from '../../../../core/interfaces/track';
 
@@ -25,6 +26,7 @@ export class QueuePanelComponent {
   readonly gates = inject(FeatureGateService);
   private upgradePrompt = inject(UpgradePromptService);
   private analytics = inject(AnalyticsService);
+  private haptics = inject(HapticsService);
 
   insertOpenAt = signal<number | null>(null);
   exportCopied = signal(false);
@@ -77,6 +79,7 @@ export class QueuePanelComponent {
 
   onCueChange(event: { index: number; cueIn?: number; cueOut?: number }): void {
     this.queue.updateCuePoints(event.index, event.cueIn, event.cueOut);
+    void this.haptics.selectionChanged();
     this.analytics.track('cue_point_added', {
       cueIn: event.cueIn != null,
       cueOut: event.cueOut != null,

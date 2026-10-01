@@ -91,6 +91,19 @@ export class AuthService implements OnDestroy {
     if (userId) await this.loadProfile(userId);
   }
 
+  /**
+   * Poll the profile until the store webhook has set is_pro (usually a few seconds after
+   * an in-app purchase). Resolves false if it hasn't landed after `attempts` tries.
+   */
+  async waitForPro(attempts = 10, delayMs = 1500): Promise<boolean> {
+    for (let i = 0; i < attempts; i++) {
+      await this.refreshProfile();
+      if (this.isPro()) return true;
+      if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
+    }
+    return false;
+  }
+
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
   }

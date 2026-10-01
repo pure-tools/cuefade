@@ -10,6 +10,7 @@ export interface Database {
           is_pro: boolean;
           stripe_customer_id: string | null;
           pro_activated_at: string | null;
+          pro_source: 'stripe' | 'app_store' | 'play_store' | null;
           created_at: string;
         };
         Insert: {
@@ -18,12 +19,14 @@ export interface Database {
           is_pro?: boolean;
           stripe_customer_id?: string | null;
           pro_activated_at?: string | null;
+          pro_source?: 'stripe' | 'app_store' | 'play_store' | null;
           created_at?: string;
         };
         Update: {
           is_pro?: boolean;
           stripe_customer_id?: string | null;
           pro_activated_at?: string | null;
+          pro_source?: 'stripe' | 'app_store' | 'play_store' | null;
         };
       };
     };

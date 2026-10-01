@@ -36,6 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         is_pro: true,
         stripe_customer_id: session.customer as string,
         pro_activated_at: new Date().toISOString(),
+        pro_source: 'stripe',
       })
       .eq('id', userId);
   }

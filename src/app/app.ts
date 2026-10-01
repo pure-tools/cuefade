@@ -1,18 +1,16 @@
 import { Component, inject, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { OfflineBanner } from './core/native/offline-banner';
 import { AuthService } from './core/services/auth.service';
 import { SessionTimeoutService } from '@pure-tools/babetka';
 import { LicenseService } from '@pure-tools/monetka';
+import { PRO_FEATURES } from './core/pro-features';
 
-const PRO_FEATURES = [
-  'spotify', 'soundcloud', 'multiple-sources',
-  'cue-points', 'export', 'fade', 'queue', 'extended-fade', 'no-ads',
-];
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  template: '<router-outlet />',
+  imports: [RouterOutlet, OfflineBanner],
+  template: '<app-offline-banner /><router-outlet />',
   styles: [':host { display: block; height: 100vh; }'],
 })
 export class App {
