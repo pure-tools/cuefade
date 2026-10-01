@@ -9,7 +9,7 @@ import { NetworkService } from '@pure-tools/mobilka/native';
       <div
         role="status"
         class="fixed top-0 inset-x-0 z-[60] bg-zinc-800 text-zinc-200 text-xs text-center py-2
-               pt-[max(0.5rem,env(safe-area-inset-top))]"
+               pt-[max(0.5rem,var(--safe-area-inset-top,env(safe-area-inset-top,0px)))]"
       >
         You're offline — playback needs an internet connection
       </div>

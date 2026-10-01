@@ -19,6 +19,7 @@ import { providePayments } from '@pure-tools/monetka';
 import { provideNative } from '@pure-tools/mobilka/native';
 import { paymentsConfig } from './core/payments.config';
 import { provideNativeFeedback } from './core/native/native-feedback';
+import { provideSystemBarsSync } from './core/native/system-bars';
 import { provideTheme } from '@pure-tools/paletka';
 import { AUTH_PROVIDER, provideSecurka } from '@pure-tools/babetka';
 import {
@@ -59,5 +60,6 @@ export const appConfig: ApplicationConfig = {
     // Capacitor bridge — every call is a no-op in the browser
     provideNative(),
     provideNativeFeedback(),
+    provideSystemBarsSync(),
   ],
 };

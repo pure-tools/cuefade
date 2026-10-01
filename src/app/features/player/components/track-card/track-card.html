@@ -63,7 +63,7 @@
       <!-- Play next — hidden for the currently playing track -->
       @if (!isCurrent()) {
         <button
-          class="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-yellow-400 transition-opacity text-xs px-1.5 py-0.5 rounded border border-zinc-700 hover:border-yellow-400"
+          class="opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100 text-zinc-400 hover:text-yellow-400 transition-opacity text-xs px-1.5 py-0.5 rounded border border-zinc-700 hover:border-yellow-400"
           (click)="playNext.emit(index())"
           title="Play next"
         >↑ Next</button>
